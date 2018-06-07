@@ -2,11 +2,11 @@ from flask import jsonify
 
 import pymysql
 
-host = "192.168.0.12"
+host = "127.0.0.1"
 port = 3306
-user = "appuser_gm"
+user = "root"
 passwd = "123456"
-db = "geomagnetism"
+db = "test"
 conn = None
 cursor = None
 
