@@ -11,12 +11,15 @@ class priceDistribute(Resource):
     from model import price_distribute
 
     parser = reqparse.RequestParser()
+    parser.add_argument('stock_code')
     parser.add_argument('starttime')
     parser.add_argument('endtime')
 
     params = parser.parse_args()
 
-    return price_distribute.index(params)
+    result = price_distribute.index(params)
+
+    return jsonify(result)
 
 api.add_resource(priceDistribute, '/v1/price_distribute/')
 
