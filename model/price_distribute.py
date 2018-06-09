@@ -1,38 +1,24 @@
-from flask import jsonify
-
-import pymysql
-
-host = "127.0.0.1"
-port = 3306
-user = "root"
-passwd = "123456"
-db = "test"
-conn = None
-cursor = None
-
-conn = pymysql.connect(host=host, port=port, user=user, passwd=passwd, db=db, charset="utf8")
-cursor = conn.cursor()
-
+from conf import cursor 
 
 class price_distribute:
 
   @staticmethod
-  def index():
-    sql="SELECT host_id, count(if(status=0, status, null)) as b, count(if(status=1, status, null)) as c FROM berth GROUP BY host_id";
+  def index(params):
+    sql="SELECT price, SUM(if(deal_type='buy', quantity, null)) as buy, sum(if(deal_type='sale', quantity, null)) as sale FROM deal GROUP BY price";
     cursor.execute(sql)
-    result = cursor.fetchall()
+    results = cursor.fetchall()
 
-    if len(result) == 0:
+    if len(results) == 0:
       return {}
     else:
       data = []
 
-      for (host_id, s0, s1) in result: 
-        price = {}
-        price["price"] = host_id
-        price["buy"] = s0 
-        price["sale"] = s1 
+      for result in results: 
+        row = {}
+        row["price"] = str(result[0])
+        row["buy"] = str(result[1])
+        row["sale"] = str(result[2])
 
-        data.append(price)
+        data.append(row)
 
       return data
